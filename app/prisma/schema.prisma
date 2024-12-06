@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-py"
+  recursive_type_depth = -1
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @id @map("userId")
+  name  String
+  email String  @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  disabled Boolean @default(false)
+  tags Tag[]
+  ratings Rating[]
+}
+
+model Movie {
+  id    Int     @id @map("movieId")
+  title  String
+  genres String[]
+  imdbId String
+  tmdbId String
+  tags Tag[]
+  ratings Rating[]
+  genome GenomeScore[]
+}
+
+model Rating {
+  id    Int     @id @default(autoincrement())
+  userId Int
+  movieId Int
+  score Float
+  createdAt DateTime
+
+  user User @relation(fields: [userId], references: [id])
+  movie Movie @relation(fields: [movieId], references: [id])
+
+  @@unique([userId, movieId])
+}
+
+model Tag{
+  id    Int     @id @default(autoincrement())
+  userId Int
+  movieId Int
+  tag String
+  createdAt DateTime
+
+  user User @relation(fields: [userId], references: [id])
+  movie Movie @relation(fields: [movieId], references: [id])
+}
+
+model GenomeTag {
+  id   Int     @id @map("tagId")
+  tag String
+  scores GenomeScore[]
+}
+
+model GenomeScore {
+  id   Int     @id @default(autoincrement())
+  movieId Int
+  tagId Int
+  relevance Float
+
+  movie Movie @relation(fields: [movieId], references: [id])
+  tag GenomeTag @relation(fields: [tagId], references: [id])
+}
