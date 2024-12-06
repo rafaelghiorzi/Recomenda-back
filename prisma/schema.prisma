@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
@@ -16,22 +16,22 @@ datasource db {
 
 model User {
   id    Int     @id @default(autoincrement()) 
-  name  String?
-  email String?  @unique
-  password String?
+  username  String  @unique
+  email String  @unique
+  password String
   createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
-  disabled Boolean? @default(false)
-  tags Tag[]
+  updatedAt DateTime @updatedAt
   ratings Rating[]
 }
 
 model Movie {
-  id    Int     @id @map("movieId")
+  id    Int     @id @default(autoincrement())
   title  String
   genres String[]
   tags Tag[]
   ratings Rating[]
+  avgRating Float @default(0)
+  ratingCount Int @default(0)
 }
 
 model Rating {
@@ -40,7 +40,6 @@ model Rating {
   movieId Int
   score Float
   createdAt DateTime @default(now())
-  timestamp Int
 
   user User @relation(fields: [userId], references: [id])
   movie Movie @relation(fields: [movieId], references: [id])
@@ -55,6 +54,5 @@ model Tag{
   tag String
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
   movie Movie @relation(fields: [movieId], references: [id])
 }
