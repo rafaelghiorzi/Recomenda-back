@@ -4,7 +4,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from .utils.prisma import connect, disconnect
-from .routers.user import user_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -15,7 +14,6 @@ async def lifespan(app: FastAPI):
     await disconnect()
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(user_router)
 
 @app.get("/")
 async def root():

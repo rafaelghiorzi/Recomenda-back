@@ -15,13 +15,13 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @map("userId")
-  name  String
-  email String  @unique
-  password String
+  id    Int     @id @default(autoincrement()) 
+  name  String?
+  email String?  @unique
+  password String?
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  disabled Boolean @default(false)
+  updatedAt DateTime? @updatedAt
+  disabled Boolean? @default(false)
   tags Tag[]
   ratings Rating[]
 }
@@ -30,11 +30,8 @@ model Movie {
   id    Int     @id @map("movieId")
   title  String
   genres String[]
-  imdbId String
-  tmdbId String
   tags Tag[]
   ratings Rating[]
-  genome GenomeScore[]
 }
 
 model Rating {
@@ -42,7 +39,8 @@ model Rating {
   userId Int
   movieId Int
   score Float
-  createdAt DateTime
+  createdAt DateTime @default(now())
+  timestamp Int
 
   user User @relation(fields: [userId], references: [id])
   movie Movie @relation(fields: [movieId], references: [id])
@@ -55,24 +53,8 @@ model Tag{
   userId Int
   movieId Int
   tag String
-  createdAt DateTime
+  createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
   movie Movie @relation(fields: [movieId], references: [id])
-}
-
-model GenomeTag {
-  id   Int     @id @map("tagId")
-  tag String
-  scores GenomeScore[]
-}
-
-model GenomeScore {
-  id   Int     @id @default(autoincrement())
-  movieId Int
-  tagId Int
-  relevance Float
-
-  movie Movie @relation(fields: [movieId], references: [id])
-  tag GenomeTag @relation(fields: [tagId], references: [id])
 }
