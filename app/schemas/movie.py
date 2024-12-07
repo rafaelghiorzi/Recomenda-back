@@ -15,7 +15,7 @@ class MovieRead(BaseModel):
     ratingCount: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Update DTO (para quando for alterar informações, como média de avaliações)
 class MovieUpdate(BaseModel):

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+
 # Create DTO
 class TagCreate(BaseModel):
     userId: int
@@ -16,4 +17,4 @@ class TagRead(BaseModel):
     createdAt: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

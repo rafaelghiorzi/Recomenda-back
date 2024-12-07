@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from typing import List
+from typing import Optional
 
 # Create DTO
 class UserCreate(BaseModel):
@@ -17,9 +17,16 @@ class UserRead(BaseModel):
     updatedAt: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Update DTO
 class UserUpdate(BaseModel):
-    username: str
-    email: EmailStr
+    username: Optional[str] = None
+    password: Optional[str] = None
+    
+
+# Token DTO
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str

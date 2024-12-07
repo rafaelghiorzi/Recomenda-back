@@ -3,8 +3,9 @@
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from app.core.auth import decode_access_token
 from app.core.prisma import connect, disconnect
-from app.api.routes import user_routes, movie_routes, rating_routes, tag_routes
+from app.api.routes import user_routes, movie_routes, rating_routes, tag_routes, auth_routes
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -19,6 +20,7 @@ app.include_router(user_routes.router, prefix="/users", tags=["users"])
 app.include_router(movie_routes.router, prefix="/movies", tags=["movies"])
 app.include_router(rating_routes.router, prefix="/ratings", tags=["ratings"])
 app.include_router(tag_routes.router, prefix="/tags", tags=["tags"])
+app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 
 @app.get("/")
 async def root():
