@@ -1,5 +1,8 @@
 # colaborative.py
 
+"""This algorithm is a collaborative filtering recommendation system that recommends
+movies to a user based on the ratings of similar users."""
+
 import pandas as pd
 from prisma import Prisma
 

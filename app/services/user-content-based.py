@@ -1,4 +1,7 @@
-# content-based.py
+# user-content-based.py
+
+"""This algorithm is a content-based recommendation system that recommends
+movies to a user based on the genres of movies they have previously rated highly."""
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -31,6 +34,7 @@ async def recommend_movies_based_on_genre(user_id: int, limit: int = 10):
     # Calcular similaridade com os filmes bem avaliados
     liked_indices = [i for i, m in enumerate(movies) if m.id in liked_movie_ids]
     user_profile = genre_matrix[liked_indices].mean(axis=0)
+    user_profile = np.asarray(user_profile)  # Convert to numpy array
     similarities = cosine_similarity(user_profile, genre_matrix).flatten()
 
     # Ordenar os filmes baseando-se na similaridade
@@ -44,7 +48,7 @@ async def recommend_movies_based_on_genre(user_id: int, limit: int = 10):
 
     return recommended_movies
 
-# Executar a função
+# Executar a recomendação
 import asyncio
 movies = asyncio.run(recommend_movies_based_on_genre(1))
 for movie in movies:
